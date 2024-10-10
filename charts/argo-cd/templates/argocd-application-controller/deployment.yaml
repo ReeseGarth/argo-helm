@@ -301,6 +301,16 @@ spec:
         - name: metrics
           containerPort: {{ .Values.controller.containerPorts.metrics }}
           protocol: TCP
+        {{- if .Values.controller.livenessProbe.enabled }}
+        livenessProbe:
+          tcpSocket:
+            port: probe
+          initialDelaySeconds: {{ .Values.controller.livenessProbe.initialDelaySeconds }}
+          periodSeconds: {{ .Values.controller.livenessProbe.periodSeconds }}
+          timeoutSeconds: {{ .Values.controller.livenessProbe.timeoutSeconds }}
+          successThreshold: {{ .Values.controller.livenessProbe.successThreshold }}
+          failureThreshold: {{ .Values.controller.livenessProbe.failureThreshold }}
+        {{- end }}
         readinessProbe:
           httpGet:
             path: /healthz
